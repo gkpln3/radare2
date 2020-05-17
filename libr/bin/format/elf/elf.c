@@ -2654,7 +2654,6 @@ static void populate_relocs_record_from_dynamic(ELFOBJ *bin, RBinElfReloc *reloc
 	size_t offset;
 	size_t i = 0;
 	size_t size = get_size_rel_mode (bin->dyn_info.dt_pltrel);
-
 	size_t p = 0;
 
 	for (offset = 0; offset < bin->dyn_info.dt_pltrelsz && p < num_relocs; offset += size) {
@@ -2680,20 +2679,19 @@ static void populate_relocs_record_from_dynamic(ELFOBJ *bin, RBinElfReloc *reloc
 }
 
 static size_t get_next_not_analysed_offset(ELFOBJ *bin, size_t section_offset, size_t offset, size_t base_addr) {
-
 	size_t g_offset = section_offset + offset;
 
-	if (bin->dyn_info.dt_rela != ELF_ADDR_MAX && bin->dyn_info.dt_rela - base_addr <= g_offset
+	if (bin->dyn_info.dt_rela != ELF_ADDR_MAX && bin->dyn_info.dt_rela - base_addr < g_offset
 		&& g_offset < bin->dyn_info.dt_rela + bin->dyn_info.dt_relasz - base_addr) {
 		return bin->dyn_info.dt_rela + bin->dyn_info.dt_relasz - g_offset - base_addr;
 	}
 
-	if (bin->dyn_info.dt_rel != ELF_ADDR_MAX && bin->dyn_info.dt_rel - base_addr <= g_offset
+	if (bin->dyn_info.dt_rel != ELF_ADDR_MAX && bin->dyn_info.dt_rel - base_addr < g_offset
 		&& g_offset < bin->dyn_info.dt_rel + bin->dyn_info.dt_relsz - base_addr) {
 		return bin->dyn_info.dt_rel + bin->dyn_info.dt_relsz - g_offset - base_addr;
 	}
 
-	if (bin->dyn_info.dt_jmprel != ELF_ADDR_MAX && bin->dyn_info.dt_jmprel - base_addr <= g_offset
+	if (bin->dyn_info.dt_jmprel != ELF_ADDR_MAX && bin->dyn_info.dt_jmprel - base_addr < g_offset
 		&& g_offset < bin->dyn_info.dt_jmprel + bin->dyn_info.dt_pltrelsz - base_addr) {
 		return bin->dyn_info.dt_jmprel + bin->dyn_info.dt_pltrelsz - g_offset - base_addr;
 	}
